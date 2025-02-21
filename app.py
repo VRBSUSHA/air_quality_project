@@ -19,16 +19,20 @@ def download_model():
 # Download model if not exists
 download_model()
 
-# Define a custom Lambda layer with output_shape
+# Define a custom Lambda layer with explicit output shape
 def custom_lambda(x):
-    return x  # Replace this with the actual logic used in your Lambda layer
+    return x  # Replace this with your actual Lambda function logic
+
+# Define the expected output shape function
+def custom_lambda_output_shape(input_shape):
+    return input_shape  # Ensure it matches your model's expected shape
 
 # Load model with custom Lambda layer
 try:
     with st.spinner("Loading model..."):
         # Define custom objects for the Lambda layer
         custom_objects = {
-            'Lambda': Lambda(custom_lambda, output_shape=(224, 224, 3))
+            'Lambda': Lambda(custom_lambda, output_shape=custom_lambda_output_shape)
         }
         model = tf.keras.models.load_model(
             model_path,
