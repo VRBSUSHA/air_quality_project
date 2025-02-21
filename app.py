@@ -8,7 +8,7 @@ import gdown
 import os
 
 # Google Drive file ID
-GDRIVE_MODEL_ID = "1os3m_b2PYcvCz33Ku_vzRjSkhBh8Y7e5"
+GDRIVE_MODEL_ID = "1MGBH4qECimwgJGXLuEv2Y_ZEUV9b0Yql"
 MODEL_PATH = "model.h5"
 
 # Function to download model from Google Drive
