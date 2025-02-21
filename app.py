@@ -42,7 +42,7 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg
 if uploaded_file is not None:
     # Show the uploaded image
     image_display = Image.open(uploaded_file)
-    st.image(image_display, caption="Uploaded Image", use_column_width=True)
+    st.image(image_display, caption="Uploaded Image", use_container_width=True)  # Updated parameter
 
     # Preprocess and predict
     img_array = preprocess_image(image_display)
