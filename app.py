@@ -32,23 +32,38 @@ def preprocess_image(img):
     img_array /= 255.0  # Normalize
     return img_array
 
+# Air Quality Classification Information
+air_quality_info = {
+    "e_Very_Unhealthy": {"Range": "201-300", "Label": "Very Unhealthy", "Description": "Health warnings of emergency conditions. The entire population is more likely to be affected."},
+    "f_Severe": {"Range": "301-500", "Label": "Hazardous", "Description": "Serious health effects; everyone should avoid outdoor activities."}
+}
+
 # Streamlit UI
-st.title("Image Classification App")
-st.write("Upload an image, and the model will predict its class.")
+st.title("🌍 Air Quality Classification")
+st.write("Upload an image to classify the air quality level.")
 
 # File uploader
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("📷 Choose an image...", type=["jpg", "png"])
 
 if uploaded_file is not None:
     # Show the uploaded image
     image_display = Image.open(uploaded_file)
-    st.image(image_display, caption="Uploaded Image", use_container_width=True)  # Updated parameter
+    st.image(image_display, caption="Uploaded Image", use_container_width=True)
 
     # Preprocess and predict
     img_array = preprocess_image(image_display)
     prediction = model.predict(img_array)
+    predicted_class = np.argmax(prediction)
 
     # Show prediction
     st.subheader("Prediction:")
-    st.write(f"Class: {np.argmax(prediction)}")
-    st.write(f"Confidence: {np.max(prediction):.2f}")
+    st.write(f"Class: {predicted_class}")
+
+    # Display air quality information based on the predicted class
+    if predicted_class in air_quality_info:
+        st.subheader("Air Quality Information:")
+        st.write(f"**Range:** {air_quality_info[predicted_class]['Range']}")
+        st.write(f"**Label:** {air_quality_info[predicted_class]['Label']}")
+        st.write(f"**Description:** {air_quality_info[predicted_class]['Description']}")
+    else:
+        st.write("No air quality information available for this class.")
