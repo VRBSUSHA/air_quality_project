@@ -4,7 +4,6 @@ import numpy as np
 import gdown
 import os
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from tensorflow.keras.layers import Lambda
 
 # Google Drive file ID (Extracted from the link)
 drive_file_id = "1os3m_b2PYcvCz33Ku_vzRjSkhBh8Y7e5"
@@ -19,26 +18,10 @@ def download_model():
 # Download model if not exists
 download_model()
 
-# Define a custom Lambda layer with explicit output shape
-def custom_lambda(x):
-    return x  # Replace this with your actual Lambda function logic
-
-# Define the expected output shape function
-def custom_lambda_output_shape(input_shape):
-    return input_shape  # Ensure it matches your model's expected shape
-
-# Load model with custom Lambda layer
+# Load model
 try:
     with st.spinner("Loading model..."):
-        # Define custom objects for the Lambda layer
-        custom_objects = {
-            'Lambda': Lambda(custom_lambda, output_shape=custom_lambda_output_shape)
-        }
-        model = tf.keras.models.load_model(
-            model_path,
-            compile=False,
-            custom_objects=custom_objects
-        )
+        model = tf.keras.models.load_model(model_path, compile=False)
     st.success("Model successfully loaded!")
 except Exception as e:
     st.error(f"Error loading model: {e}")
@@ -89,11 +72,13 @@ if uploaded_file is not None:
                 predicted_index = np.argmax(predictions)
                 predicted_class = class_names[predicted_index]
 
+
                 # Get AQI details
                 result = aq_descriptions[predicted_class]
 
                 # Display results
                 st.subheader(f"🌡 Prediction: {result['Label']} ({result['Range']})")
+
                 st.write(result['Description'])
 
                 # Show warning for hazardous air quality
